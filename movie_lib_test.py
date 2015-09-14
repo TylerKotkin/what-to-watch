@@ -32,8 +32,8 @@ def test_movie_creation():
 def test_rating_creation():
     assert rating1.user_id == rating3.user_id == user1.id
     assert rating2.user_id == rating4.user_id == user2.id
-    assert rating1.movie_id == rating4.user_id == movie1.id
-    assert rating2.movie_id == rating3.user_id == movie2.id
+    assert rating1.movie_id == rating4.movie_id == movie1.id
+    assert rating2.movie_id == rating3.movie_id == movie2.id
     assert rating1.stars == 4
     assert rating2.stars == 1
     assert rating3.stars == 3
@@ -48,3 +48,12 @@ def test_find_ratings_for_movie():
     toy_story_ratings = all_movies[movie1.id].get_ratings()
 
     assert len(toy_story_ratings) == 2
+
+def test_find_ratings_for_user():
+
+    user1_ratings = all_users[user1.id].get_ratings()
+
+    assert len(user1_ratings) == 2
+
+def test_get_average_rating():
+    assert movie1.ave_rating() == (4+1)/2
