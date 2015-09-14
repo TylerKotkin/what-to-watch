@@ -41,19 +41,19 @@ def test_rating_creation():
 
 
 
-def test_find_ratings_for_movie():
-    # toy_story_ratings = get_ratings_for_movie(movie1.id)
+def test_ratings_for_movie():
+
 
     # should return a list of rating objects
     toy_story_ratings = all_movies[movie1.id].get_ratings()
 
     assert len(toy_story_ratings) == 2
 
-def test_find_ratings_for_user():
+def test_ratings_for_user():
 
     user1_ratings = all_users[user1.id].get_ratings()
 
     assert len(user1_ratings) == 2
 
-def test_get_average_rating():
+def test_ave_rating():
     assert movie1.ave_rating() == (4+1)/2
