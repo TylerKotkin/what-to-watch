@@ -106,22 +106,46 @@ def top_rated(x=3,all_movies=all_movies):
     listed = int(input("Enter the number of movies to be listed:  "))
     for x in all_movies:
         if len(all_movies[x].get_ratings()) > 10:
-            top_movies[x] = all_movies[x].ave_rating()
+            top_rated_movies[x] = all_movies[x].ave_rating()
     top_rated_movies = sorted(top_rated_movies.items(), key=lambda c: c[1], reverse=True)
     # print('here')
-    for item in top_movies[:listed]:
+    for item in top_rated_movies[:listed]:
         print((all_movies[item[0]].title))
     return main()
 
 
-
-#------------
-
 def not_yet_rated(user, all_movies=all_movies, all_users=all_users):
-    safe_dict = all_movies.copy()
-    for key in all_users[user].ratings:
-        del safe_dict[key]
-    movie_suggested = top_rated(5, safe_dict)
+    already_rated = all_movies.copy()
+    for x in all_users[user].ratings:
+        del already_rated[x]
+    movie_suggested = top_rated(5, already_rated)
+
+def user1_vs_user2(user1, user2, all_movies=all_movies, all_users=all_users):
+    user1_ratings = []
+    user2_ratings = []
+    for x in all_users[user1].ratings:
+            user1_ratings.append(all_users[user1].ratings[x])
+    for x in all_users[user2].ratings:
+            user2_ratings.append(all_users[user2].ratings[x])
+    return euclidean_distance(user1_ratings,user2_ratings)
+
+
+
+def euclidean_distance(v, w):
+    """Given two lists, give the Euclidean distance between them on a scale
+    of 0 to 1. 1 means the two lists are identical.
+    """
+
+    # Guard against empty lists.
+    if len(v) is 0:
+        return 0
+
+    # Note that this is the same as vector subtraction.
+    differences = [v[idx] - w[idx] for idx in range(len(v))]
+    squares = [diff ** 2 for diff in differences]
+    sum_of_squares = sum(squares)
+
+    return 1 / (1 + math.sqrt(sum_of_squares))
 
 
 
@@ -132,13 +156,19 @@ def main():
     users()
     data()
 
-    start = input("Please enter one of the following options. \n For a list of the top rated movies, enter 1. \n For a list of the top rated movies you have not yet rated, enter 2. \n to quit enter q. \n Enter 1, 2 or q here: ")
+    start = input("\nPlease enter one of the following options. \n For a list of the top rated movies, enter 1. \n For a list of the top rated movies you have not yet rated, enter 2. \n to quit enter q. \n Enter 1, 2 or q here: ")
     if start == '1':
         top_rated()
     elif start == '2':
         user = input("Please enter reviewer id: ")
         user = int(user)
         not_yet_rated(user)
+    # elif start == '3':
+    #     user1 = input("Please enter the first reviewer id: ")
+    #     user1 = int(user1)
+    #     user2 = input("Please enter the second reviewer id: ")
+    #     user2 = int(user2)
+    #     user1_vs_user2(user1, user2)
     elif start == 'q':
         quit()
     else:
